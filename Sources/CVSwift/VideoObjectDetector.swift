@@ -12,9 +12,21 @@ import Foundation
 
 public class VideoObjectDetector {
    private let videoManager = VideoManager()
+   private let trackingManager = ObjectTrackingManager()
    
-   public func processRoboflowModel(modelId: String, modelVersion: Int, videoURL: URL) async throws -> [ObjectDetectionObservation] {
-      return []
+   public init() {}
+   
+   public func processRoboflowModel(
+      modelId: String,
+      modelVersion: Int,
+      videoURL: URL,
+      apiKey: String
+   ) async throws -> [ObjectDetectionObservation] {
+      let roboflowManager = RoboflowManager(apiKey: apiKey)
+      let model = try await roboflowManager.loadRoboflowModel(modelId: modelId, modelVersion: modelVersion)
+      let result = try await processRoboflowModel(model, videoURL: videoURL)
+      
+      return result
    }
    
    public func processRoboflowModel(_ rfModel: RFModel, videoURL: URL) async throws -> [ObjectDetectionObservation] {
@@ -26,19 +38,14 @@ public class VideoObjectDetector {
          guard let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) else { continue }
          let response = await rfModel.detect(pixelBuffer: pixelBuffer)
          if let predictions = response.0 as? [RFObjectDetectionPrediction], response.1 == nil {
-            for prediction in predictions {
-               let size = imageSize(from: pixelBuffer)
-               let rect = prediction.visionBoundingBox(imageSize: size)
-               
-               result.append(
-                  .init(
-                     boundingBox: rect,
-                     className: prediction.className,
-                     confidence: prediction.confidence,
-                     time: buffer.presentationTimeStamp
-                  )
-               )
-            }
+             
+             let trackedObjects = trackingManager.processFrame(
+                 predictions: predictions,
+                 pixelBuffer: pixelBuffer,
+                 timestamp: buffer.presentationTimeStamp
+             )
+             
+             result.append(contentsOf: trackedObjects)
          }
       }
       
