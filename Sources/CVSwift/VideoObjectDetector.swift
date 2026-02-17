@@ -12,7 +12,6 @@ import Foundation
 
 public class VideoObjectDetector {
    private let videoManager = VideoManager()
-   private let trackingManager = ObjectTrackingManager()
    
    public init() {}
    
@@ -38,14 +37,19 @@ public class VideoObjectDetector {
          guard let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) else { continue }
          let response = await rfModel.detect(pixelBuffer: pixelBuffer)
          if let predictions = response.0 as? [RFObjectDetectionPrediction], response.1 == nil {
-             
-             let trackedObjects = trackingManager.processFrame(
-                 predictions: predictions,
-                 pixelBuffer: pixelBuffer,
-                 timestamp: buffer.presentationTimeStamp
-             )
-             
-             result.append(contentsOf: trackedObjects)
+            for prediction in predictions {
+               let size = imageSize(from: pixelBuffer)
+               let rect = prediction.visionBoundingBox(imageSize: size)
+               
+               result.append(
+                  .init(
+                     boundingBox: rect,
+                     className: prediction.className,
+                     confidence: prediction.confidence,
+                     time: buffer.presentationTimeStamp,
+                  )
+               )
+            }
          }
       }
       
