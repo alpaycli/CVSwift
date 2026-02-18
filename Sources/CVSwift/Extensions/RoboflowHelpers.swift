@@ -1,10 +1,3 @@
-//
-//  RoboflowHelpers.swift
-//  CarTrafficAnalyzer-iOS
-//
-//  Created by Alpay Calalli on 05.02.26.
-//
-
 import Roboflow
 import CoreGraphics
 import AVKit

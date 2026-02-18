@@ -12,8 +12,8 @@ public struct ObjectDetectionObservation: Identifiable, Hashable {
    public let id: UUID = UUID()
    /// Normalized Rectangle coordinates of observation.
    public let boundingBox: CGRect
-   /// Confidence value of observation. (0-1)
    public let className: String
+   /// Confidence score of observation. (0-1)
    public let confidence: Float
    /// Time of observation, if it only comes from video input. On live video, it will return nil.
    public let time: CMTime?
