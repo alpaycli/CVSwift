@@ -2,7 +2,7 @@
 
 Swift SDK for running computer vision models in iOS/macOS apps with a few lines of code.
 
-It supports both Roboflow-hosted and on-device models and hope more in the future.
+Supports Roboflow-hosted, on-device CoreML models and hope more in the future.
 
 ## Usage
 
