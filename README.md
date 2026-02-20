@@ -1,6 +1,6 @@
 # CVSwift
 
-Swift SDK for running computer vision models in iOS/macOS apps with a few lines of code.
+Swift SDK for running and previewing computer vision models in iOS/macOS apps with a few lines of code.
 
 Supports Roboflow-hosted, on-device CoreML models and hope more in the future.
 
