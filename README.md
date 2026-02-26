@@ -62,7 +62,7 @@ struct ContentView: View {
 
 ## Credits
 
-Uses [roboflow-swift](https://github.com/roboflow/roboflow-swift.git)
+Uses modified(by me) version of [roboflow-swift](https://github.com/roboflow/roboflow-swift.git)
 
 ## License
 
