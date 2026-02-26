@@ -14,7 +14,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-      .package(url: "https://github.com/roboflow/roboflow-swift.git", .upToNextMajor(from: "1.2.7"))
+//      .package(url: "https://github.com/roboflow/roboflow-swift.git", .upToNextMajor(from: "1.2.7"))
+      .package(url: "https://github.com/alpaycli/roboflow-swift.git", .branchItem("refactor"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

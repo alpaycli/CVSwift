@@ -1,15 +1,14 @@
 {
-  "originHash" : "6eee1af0a21c0ee3310dfe08c009d2f2477869a35e58d233279c67e1dc810097",
   "pins" : [
     {
       "identity" : "roboflow-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/roboflow/roboflow-swift.git",
+      "location" : "https://github.com/alpaycli/roboflow-swift.git",
       "state" : {
-        "revision" : "89996c121c73004a7ca2ffaf225bef0bdd1974e8",
-        "version" : "1.2.7"
+        "branch" : "refactor",
+        "revision" : "9428811d5b98a17bdbe1f8e0bf924e82a045e16d"
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }

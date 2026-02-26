@@ -18,7 +18,7 @@ public struct ObjectDetectionObservation: Identifiable, Hashable {
    /// Time of observation, if it only comes from video input. On live video, it will return nil.
    public let time: CMTime?
    
-   init(boundingBox: CGRect, className: String, confidence: Float, time: CMTime?) {
+   init(boundingBox: CGRect, className: String, confidence: Float, time: CMTime? = nil) {
       self.boundingBox = boundingBox
       self.className = className
       self.confidence = confidence
