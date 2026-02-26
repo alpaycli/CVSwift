@@ -56,6 +56,13 @@ public class VideoObjectDetector {
       return result
    }
    
+   public func processCoreMLModel(modelName: String, extension ext: String = "mlmodelc", videoURL: URL) async throws -> [ObjectDetectionObservation] {
+      guard let coreMLModel = loadCoreMLModelFromURL(fileName: modelName, extension: ext) else { return [] }
+      let request = VNCoreMLRequest(model: coreMLModel)
+      
+      return try await processCoreMLModel(request, videoURL: videoURL)
+   }
+   
    public func processCoreMLModel(_ request: VNCoreMLRequest, videoURL: URL) async throws -> [ObjectDetectionObservation] {
       try await videoManager.loadVideo(videoURL)
       
