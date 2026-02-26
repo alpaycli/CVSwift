@@ -1,12 +1,12 @@
 # CVSwift
 
-Swift SDK for running computer vision models in iOS/macOS apps with a few lines of code.
+Swift SDK for running and previewing computer vision models in iOS/macOS apps with a few lines of code.
 
-It supports both Roboflow-hosted and on-device models and hope more in the future.
+Supports Roboflow-hosted, on-device CoreML models and hope more in the future.
 
 ## Usage
 
-### Basic Usage(for Roboflow Object Detection models)
+### Basic Usage(for Roboflow Object Detection models on Video Player)
 
 ```Swift
 import CVSwift
@@ -26,6 +26,22 @@ struct ContentView: View {
                apiKey: your-roboflow-apikey
             )
          }
+   }
+}
+```
+
+### Camera preview
+
+```Swift
+import CVSwift
+import SwiftUI
+
+struct ContentView: View {
+   var body: some View {
+      // on-device CoreML model
+      CoreMLObjectDetecionCameraView(coreMLModelName: "basketball-player-dedector", extension: "mlmodelc")
+      // roboflow-hosted model
+      RoboflowObjectDetecionCameraView(modelId: "basketball-player-detection-2", modelVersion: 20, apiKey: apiKey)
    }
 }
 ```
