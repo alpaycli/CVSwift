@@ -20,11 +20,6 @@ public struct RoboflowObjectDetecionCameraView: View {
    private let modelVersion: Int
    private let cameraPosition: AVCaptureDevice.Position
    
-   
-   // UI values
-   private let boundingBoxPadding = 4.0
-
-   
    public init(modelId: String, modelVersion: Int, apiKey: String, cameraPosition: AVCaptureDevice.Position = .back) {
       roboflowManager = RoboflowManager(apiKey: apiKey)
       self.modelId = modelId
@@ -37,14 +32,19 @@ public struct RoboflowObjectDetecionCameraView: View {
          .overlay {
             GeometryReader { geometry in
                ForEach(observations) { observation in
-//                  let rect = viewRectConverted(fromNormalizedContentsRect: observation.boundingBox, viewRect: geometry.frame(in: .global))
                   let rect = observation.boundingBox
+                  let width = convertedSize(from: rect.size, in: geometry.size).width
                   if rect != .zero {
-                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.black, style: .init(lineWidth: 4.0))
-                        .frame(width: convertedSize(from: rect.size, in: geometry.size).width,
-                               height: convertedSize(from: rect.size, in: geometry.size).height)
-                        .position(convertedPosition(from: rect, in: geometry.size))
+                     VStack(alignment: .trailing, spacing: 4){
+                        Text(observation.className)
+                           .font(.system(size: width / 8, weight: .bold))
+                        RoundedRectangle(cornerRadius: 8)
+                           .stroke(.black, style: .init(lineWidth: 2.0))
+                     }
+                     .frame(width: width,
+                            height: convertedSize(from: rect.size, in: geometry.size).height)
+                     .position(convertedPosition(from: rect, in: geometry.size))
+                     
                   }
                }
             }
@@ -67,10 +67,7 @@ public struct RoboflowObjectDetecionCameraView: View {
                if let predictions = response.0 as? [RFObjectDetectionPrediction], response.1 == nil {
                   var result: [ObjectDetectionObservation] = []
                   for prediction in predictions {
-//                     let size = imageSize(from: pixelBuffer)
-//                     let rect = prediction.visionBoundingBox(imageSize: size)
                      let rect = prediction.box
-                     print("prediction.box", prediction.box)
                      
                      result.append(
                         .init(

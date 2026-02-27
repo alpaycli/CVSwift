@@ -41,12 +41,18 @@ public struct CoreMLObjectDetecionCameraView: View {
             GeometryReader { geometry in
                ForEach(observations) { observation in
                   let rect = observation.boundingBox
+                  let width = convertedSize(from: rect.size, in: geometry.size).width
                   if rect != .zero {
-                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.black, style: .init(lineWidth: 4.0))
-                        .frame(width: convertedSize(from: rect.size, in: geometry.size).width,
-                               height: convertedSize(from: rect.size, in: geometry.size).height)
-                        .position(convertedPosition(from: rect, in: geometry.size))
+                     VStack(alignment: .trailing, spacing: 4){
+                           Text(observation.className)
+                           .font(.system(size: width / 8, weight: .bold))
+                        RoundedRectangle(cornerRadius: 8)
+                           .stroke(.black, style: .init(lineWidth: 2.0))
+                     }
+                     .frame(width: width,
+                            height: convertedSize(from: rect.size, in: geometry.size).height)
+                     .position(convertedPosition(from: rect, in: geometry.size))
+                     
                   }
                }
             }

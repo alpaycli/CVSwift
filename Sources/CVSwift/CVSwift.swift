@@ -72,6 +72,15 @@ func convertedPosition(from normalizedRect: CGRect, in viewSize: CGSize) -> CGPo
     return CGPoint(x: scaledX, y: scaledY)
 }
 
+/// Converts a normalized Vision point to a SwiftUI point
+func convertedLabelPosition(from normalizedRect: CGRect, in viewSize: CGSize) -> CGPoint {
+    // 1. Scale x and y
+    let scaledX = normalizedRect.maxX * viewSize.width
+    // 2. Flip y: subtract the scaled y from the total height to flip the origin
+    let scaledY = (1 - normalizedRect.maxY) * viewSize.height
+    return CGPoint(x: scaledX, y: scaledY)
+}
+
 /// Converts a normalized Vision size to a SwiftUI size
 func convertedSize(from normalizedSize: CGSize, in viewSize: CGSize) -> CGSize {
     // Only scaling is needed for width and height
