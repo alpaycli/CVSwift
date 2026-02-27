@@ -5,6 +5,7 @@
 //  Created by Alpay Calalli on 21.02.26.
 //
 
+import AVFoundation
 import Vision
 import CoreML
 import SwiftUI
@@ -14,18 +15,28 @@ public struct CoreMLObjectDetecionCameraView: View {
    
    @State private var observations: [ObjectDetectionObservation] = []
    
+   private let cameraPosition: AVCaptureDevice.Position
    private let coreMLModel: VNCoreMLModel?
    
-   public init(coreMLModel: VNCoreMLModel) {
+   public init(
+      coreMLModel: VNCoreMLModel,
+      cameraPosition: AVCaptureDevice.Position = .back
+   ) {
       self.coreMLModel = coreMLModel
+      self.cameraPosition = cameraPosition
    }
    
-   public init(coreMLModelName: String, extension ext: String = "mlmodel") {
+   public init(
+      coreMLModelName: String,
+      extension ext: String = "mlmodel",
+      cameraPosition: AVCaptureDevice.Position = .back
+   ) {
       self.coreMLModel = loadCoreMLModelFromURL(fileName: coreMLModelName, extension: ext)
+      self.cameraPosition = cameraPosition
    }
       
    public var body: some View {
-      CameraView(cameraManager: cameraManager)
+      CameraPreview(sessionLayer: cameraManager.getPreviewLayer())
          .overlay {
             GeometryReader { geometry in
                ForEach(observations) { observation in
@@ -52,9 +63,7 @@ public struct CoreMLObjectDetecionCameraView: View {
             let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer)
             do {
                try handler.perform([request])
-               print(request.results)
                if let observations = request.results as? [VNRecognizedObjectObservation] {
-                  print("results", observations.map(\.boundingBox))
                   for observation in observations {
                      guard let mainLabel = observation.labels.first else { continue }
                      result.append(
@@ -72,5 +81,10 @@ public struct CoreMLObjectDetecionCameraView: View {
             
             observations = result
          }
+         .onAppear {
+            cameraManager.startSession(position: cameraPosition)
+         }
+         .onDisappear { cameraManager.stopSession() }
+
    }
 }

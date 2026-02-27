@@ -27,10 +27,9 @@ class CameraManager: NSObject, ObservableObject {
    @Published var capturedImage: NSImage?
    #endif
    @Published var currentBuffer: CMSampleBuffer?
-   @Published var cameraPosition: AVCaptureDevice.Position = .back
    
-   func startSession() {
-      configureSession(position: cameraPosition)
+   func startSession(position: AVCaptureDevice.Position) {
+      configureSession(position: position)
    }
    
    // ← ADD: extracted so it's reusable for switching
@@ -70,19 +69,6 @@ class CameraManager: NSObject, ObservableObject {
       if !session.isRunning {
          DispatchQueue.global().async { self.session.startRunning() }
       }
-   }
-   
-   // ← ADD
-   func switchCamera() {
-      cameraPosition = (cameraPosition == .back) ? .front : .back
-      configureSession(position: cameraPosition)
-   }
-   
-   // ← ADD: set a specific position directly
-   func setCamera(position: AVCaptureDevice.Position) {
-      guard position != cameraPosition else { return }
-      cameraPosition = position
-      configureSession(position: cameraPosition)
    }
    
    // Lifecycle Management

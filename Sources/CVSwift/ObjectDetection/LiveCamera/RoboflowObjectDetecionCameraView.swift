@@ -33,7 +33,7 @@ public struct RoboflowObjectDetecionCameraView: View {
    }
 
    public var body: some View {
-      CameraView(cameraManager: cameraManager)
+      CameraPreview(sessionLayer: cameraManager.getPreviewLayer())
          .overlay {
             GeometryReader { geometry in
                ForEach(observations) { observation in
@@ -86,6 +86,9 @@ public struct RoboflowObjectDetecionCameraView: View {
          }
          .task {
             rfModel = try? await roboflowManager?.loadRoboflowModel(modelId: modelId, modelVersion: modelVersion)
+            cameraManager.startSession(position: cameraPosition)
          }
+         .onDisappear { cameraManager.stopSession() }
+
    }
 }
