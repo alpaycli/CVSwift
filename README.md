@@ -48,7 +48,7 @@ struct ContentView: View {
 
 ### Here is an example of running Roboflow-hosted YOLOv3 model on camera:
 
-![Demo](cv-swift-roboflow-preview.mov)
+![Demo](cv-swift-roboflow-preview.gif)
 
 ## Installation
 
